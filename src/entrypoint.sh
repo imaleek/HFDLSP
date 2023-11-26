@@ -8,7 +8,7 @@ then
     sleep 0.1
     done
 
-    echo "PostgreSQL started"
+    echo "Postgres database has initialized successfully"
 fi
 
 exec "$@"

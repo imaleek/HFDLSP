@@ -41,8 +41,8 @@ RUN chmod +x  $APP_HOME/entrypoint.sh
 
 COPY . $APP_HOME
 
-#RUN chown -R app:app $APP_HOME
+RUN chown -R app:app $APP_HOME
 
-#USER app
+USER app
 
-ENTRYPOINT ["/home/app/web/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash","/home/app/web/entrypoint.sh"]
