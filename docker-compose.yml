@@ -4,7 +4,7 @@ services:
   hfdlsp:
     build:
       context: ./src
-    command: gunicorn hfdlsp.wsgi:application --bind 0.0.0.0:8080
+    command: gunicorn HFDLSP.wsgi:application --bind 0.0.0.0:8080
     container_name: hfdlsp
     env_file:
       - ./src/.env
