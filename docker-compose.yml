@@ -2,12 +2,9 @@ version: '3.8'
 
 services:
   hfdlsp:
-    build:
-      context: ./src
+    build: ./src
     command: gunicorn HFDLSP.wsgi:application --bind 0.0.0.0:8080
     container_name: hfdlsp
-    ports:
-      - "8080:8080"
     env_file:
       - ./src/.env
 
