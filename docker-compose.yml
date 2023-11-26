@@ -6,6 +6,8 @@ services:
       context: ./src
     command: gunicorn HFDLSP.wsgi:application --bind 0.0.0.0:8080
     container_name: hfdlsp
+    ports:
+      - "8080:8080"
     env_file:
       - ./src/.env
 
@@ -13,6 +15,6 @@ services:
     build: ./nginx
     container_name: nginx
     ports:
-      - 80:80
+      - 1300:80
     depends_on:
       - hfdlsp
