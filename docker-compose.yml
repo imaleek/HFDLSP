@@ -15,7 +15,3 @@ services:
       - 80:80
     depends_on:
       - hfdlsp
-
-volumes:
-  postgres_data:
-  static_volume:
