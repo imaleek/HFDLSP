@@ -13,7 +13,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get install -y python3-pip
+            sudo apt-get install -y pip3
             pip3 install -r requirements.txt
             pip install flake8==6.0.0
       - run:
