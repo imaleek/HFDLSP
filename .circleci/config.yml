@@ -16,12 +16,12 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y pip
             pip install --upgrade pip
-            pip install -r requirements.txt
             pip install flake8==6.0.0
+            pip install -r src/requirements.txt
       - run:
           name: Run linter
           command: |
-            flake8 --ignore=E501,F401 .
+            flake8 --ignore=E501,F401 src/.
       - run:
           name: Run tests
           command: |
