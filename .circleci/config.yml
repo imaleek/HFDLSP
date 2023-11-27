@@ -1,0 +1,66 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/python:3.11
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get install -y python3-pip
+            pip3 install -r requirements.txt
+            pip install flake8==6.0.0
+      - run:
+          name: Run linter
+          command: |
+            flake8 --ignore=E501,F401 .
+      - run:
+          name: Run tests
+          command: |
+            python src/manage.py test
+
+  build_and_push_image:
+    docker:
+      - image: cimg/python:3.11
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t trenchesai/hfdlsp:latest src
+            docker tag trenchesai/hfdlsp:latest trenchesai/hfdlsp:${CIRCLE_SHA1}
+
+      - run:
+          name: Push Docker image to Docker Hub
+          command: |
+            echo "$DOCKER_PASSWORD"
+            #docker push your-dockerhub-username/your-django-app:latest
+            #docker push your-dockerhub-username/your-django-app:${CIRCLE_SHA1}
+
+workflows:
+  build_and_push:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - main
+                - release
+      - build_and_push_image:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
+                - release
