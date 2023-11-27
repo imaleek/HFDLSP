@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  github-release: h-matsuo/github-release@0.1.3
+
 jobs:
   build:
     docker:
@@ -53,16 +56,24 @@ jobs:
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
             docker push trenchesai/hfdlsp:latest 
             docker push trenchesai/hfdlsp:$TAG
+  
+  publish-github-release:
+    executor: github-release/default
+    steps:
+      - run:
+          command: |
+            mkdir artifacts
+            echo dummy > ./artifacts/file
+      - github-release/create:
+          tag: v0.1.$CIRCLE_BUILD_NUM
+          title: Version v0.1.$CIRCLE_BUILD_NUM
+          description: This release is version v0.1.$CIRCLE_BUILD_NUM.
+          file-path: ./artifacts/file
 
 workflows:
   build_and_push:
     jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - main
-                - release
+      - build
       - build_and_push_image:
           requires:
             - build
@@ -70,4 +81,12 @@ workflows:
             branches:
               only:
                 - main
-                - release
+                - /^release-.
+      - publish-github-release:
+          requires:
+            - build
+            - build_and_push_image
+          filters:
+            branches:
+              only:
+                - main
