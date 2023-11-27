@@ -29,25 +29,29 @@ jobs:
 
   build_and_push_image:
     docker:
-      - image: cimg/python:3.11
+      - image: cimg/base:2022.09
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
 
     working_directory: ~/repo
 
     steps:
       - checkout
-
+      - setup_remote_docker
       - run:
           name: Build Docker image
           command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
             docker build -t trenchesai/hfdlsp:latest src
-            docker tag trenchesai/hfdlsp:latest trenchesai/hfdlsp:${CIRCLE_SHA1}
+            docker tag trenchesai/hfdlsp:latest trenchesai/hfdlsp:$TAG
 
       - run:
           name: Push Docker image to Docker Hub
           command: |
-            echo "$DOCKER_PASSWORD"
-            #docker push your-dockerhub-username/your-django-app:latest
-            #docker push your-dockerhub-username/your-django-app:${CIRCLE_SHA1}
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+            docker push  trenchesai/hfdlsp:latest trenchesai/hfdlsp:$TAG
 
 workflows:
   build_and_push:
