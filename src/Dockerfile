@@ -20,7 +20,7 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 FROM python:3.11.4-slim-buster as final
 EXPOSE 8080
 
-RUN mkdir -p /home/app/web
+RUN mkdir -vp /home/app/web
 
 RUN addgroup --system app && adduser --system --group app
 
@@ -41,7 +41,7 @@ RUN chmod +x  $APP_HOME/entrypoint.sh
 
 COPY . $APP_HOME
 
-RUN chown -R app:app $APP_HOME
+RUN chown -vR app:app $APP_HOME
 
 USER app
 
