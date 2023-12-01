@@ -35,7 +35,7 @@ jobs:
       - image: cimg/base:2022.09
         auth:
           username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD.mk
+          password: $DOCKERHUB_PASSWORD
 
     working_directory: ~/repo
 
