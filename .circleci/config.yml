@@ -57,6 +57,10 @@ jobs:
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
             docker push trenchesai/hfdlsp:$CIRCLE_SHA1 
             docker push trenchesai/hfdlsp:$TAG
+
+  publish-github-release:
+    executor: github-release/default
+    steps:
       - github-release/create-release
 
 workflows:
@@ -71,3 +75,10 @@ workflows:
               only:
                 - main
                 - /^release-.
+      - publish-github-release:
+          requires:
+            - build_and_push_image
+          filters:
+            branches:
+              only:
+                - main
