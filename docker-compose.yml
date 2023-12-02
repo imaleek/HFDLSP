@@ -12,6 +12,6 @@ services:
     build: ./nginx
     container_name: nginx
     ports:
-      - 1300:80
+      - 80:80
     depends_on:
       - hfdlsp

@@ -49,7 +49,7 @@ jobs:
           command: docker-compose build
       - run:
           name: Start all services declared in docker-compose.yml
-          command: docker-compose up -d
+          command: docker-compose up -d && sleep 600
 
   build_and_push_image:
     docker:
