@@ -35,6 +35,7 @@ jobs:
         pip install --upgrade pip
         pip install flake8==6.0.0
         pip install -r src/requirements.txt
+      failOnStderr: true
     displayName: Install Requirements
   
   - task: CmdLine@2
