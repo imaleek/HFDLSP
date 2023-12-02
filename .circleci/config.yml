@@ -37,9 +37,20 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Service
+          name: Install Docker Compose
+          environment:
+            COMPOSE_VERSION: 'v2.23.3'
           command: |
-            docker compose up -d
+            curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      - setup_remote_docker
+      - run:
+          name: Build images of services declared in docker-compose.yml
+          command: docker-compose build
+      - run:
+          name: Start all services declared in docker-compose.yml
+          command: docker-compose up -d
 
   build_and_push_image:
     docker:
