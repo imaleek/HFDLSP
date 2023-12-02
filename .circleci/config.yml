@@ -1,7 +1,5 @@
 version: 2.1
 
-orbs:
-  github-release: timo-reymann/github-release@1.1.0
 
 jobs:
   build:
@@ -12,7 +10,6 @@ jobs:
 
     steps:
       - checkout
-
       - run:
           name: Install dependencies
           command: |
@@ -30,6 +27,20 @@ jobs:
           command: |
             python src/manage.py test
 
+  deploy_and _test:
+    machine:
+      image: ubuntu-2004:202104-01
+      docker_layer_caching: true    
+    
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run:
+          name: Install Service
+          command: |
+            docker compose up -d
+
   build_and_push_image:
     docker:
       - image: cimg/base:2022.09
@@ -44,7 +55,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Build Docker image $CIRC
+          name: Build Docker image
           command: |
             TAG=0.1.$CIRCLE_BUILD_NUM
             docker build -t trenchesai/hfdlsp:$TAG src
@@ -58,32 +69,20 @@ jobs:
             docker push trenchesai/hfdlsp:$CIRCLE_SHA1 
             docker push trenchesai/hfdlsp:$TAG
 
-  publish-github-release:
-    executor: github-release/default
-    steps:
-      - run:
-          name: Test echo
-          command: |
-            echo CIRCLE_TAG: $CIRCLE_TAG  
-            echo CIRCLE_PROJECT_USERNAME: $CIRCLE_PROJECT_USERNAME
-            echo CIRCLE_PROJECT_REPONAME: $CIRCLE_PROJECT_REPONAME
-      - github-release/create-release
-
 workflows:
   build_and_push:
     jobs:
       - build
-      - build_and_push_image:
+      - deploy_and _test:
           requires:
             - build
           filters:
             branches:
               only:
                 - main
-                - /^release-.
-      - publish-github-release:
+      - build_and_push_image:
           requires:
-            - build_and_push_image
+            - deploy_and _test
           filters:
             branches:
               only:
