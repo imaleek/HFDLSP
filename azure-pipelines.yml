@@ -29,23 +29,23 @@ jobs:
     fetchDepth: 0
     path: '$(Build.DefinitionName)'
     
-- task: CmdLine@2
-  inputs:
-    script: |
-      pip install --upgrade pip
-      pip install flake8==6.0.0
-      pip install -r src/requirements.txt
-    failOnStderr: true
-  displayName: Install Requirements
-
-- task: CmdLine@2
-  inputs:
-    script: 'flake8 --ignore=E501,F401 src/.'
-    failOnStderr: true
-  displayName: Run Linter
-
-- task: CmdLine@2
-  inputs:
-    script: 'python3 src/manage.py test'
-    failOnStderr: true
-    
+  - task: CmdLine@2
+    inputs:
+      script: |
+        pip install --upgrade pip
+        pip install flake8==6.0.0
+        pip install -r src/requirements.txt
+      failOnStderr: true
+    displayName: Install Requirements
+  
+  - task: CmdLine@2
+    inputs:
+      script: 'flake8 --ignore=E501,F401 src/.'
+      failOnStderr: true
+    displayName: Run Linter
+  
+  - task: CmdLine@2
+    inputs:
+      script: 'python3 src/manage.py test'
+      failOnStderr: true
+      
