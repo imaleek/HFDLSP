@@ -1,0 +1,51 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+ branches:
+   include:
+     - main
+     - hotfix/*
+pr:
+ branches:
+  include:
+    - main
+
+name: $(date:yyMMdd)$(rev:.r)
+
+jobs:
+- job: Build
+  displayName: Build Job
+  pool:
+    name: Default
+
+  steps:
+  
+  - checkout: self
+    clean: true
+    fetchTags: true
+    fetchDepth: 0
+    path: '$(Build.DefinitionName)'
+    
+- task: CmdLine@2
+  inputs:
+    script: |
+      pip install --upgrade pip
+      pip install flake8==6.0.0
+      pip install -r src/requirements.txt
+    failOnStderr: true
+  displayName: Install Requirements
+
+- task: CmdLine@2
+  inputs:
+    script: 'flake8 --ignore=E501,F401 src/.'
+    failOnStderr: true
+  displayName: Run Linter
+
+- task: CmdLine@2
+  inputs:
+    script: 'python3 src/manage.py test'
+    failOnStderr: true
+    
