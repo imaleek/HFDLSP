@@ -79,6 +79,16 @@ jobs:
     displayName: Build and Push Docker Image for $(Build.DefinitionName)
 #    condition: or(eq(variables.isMain, true), eq(variables.isHotfix, true))
 
+  - task: GitHubRelease@1
+    inputs:
+      repositoryName: '$(Build.Repository.Name)'
+      action: 'create'
+      target: '$(Build.SourceVersion)'
+      tagSource: 'gitTag'
+      assets: '$(Build.SourcesDirectory)/*'
+      changeLogCompareToRelease: 'lastFullRelease'
+      changeLogType: 'commitBased'
+
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: '$(Build.SourcesDirectory)'
