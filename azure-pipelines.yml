@@ -94,6 +94,14 @@ jobs:
         latest
     displayName: Build and Push Docker Image for $(Build.DefinitionName) tag $(Build.SourceBranchName)
     condition: eq(variables.isTag, true)
+  - task: GenerateReleaseNotes@0
+    inputs:
+      FromBuildId: '$(Build.BuildId)'
+      ToBuildId: 
+      ReleaseNotesPath: 'GeneratedNotes'
+      ReleaseNotesFile: 'ReleaseNotes.md'
+      ShowOnlyChangeSet: true
+      Test: true
 
   - task: GitHubRelease@1
     inputs:
