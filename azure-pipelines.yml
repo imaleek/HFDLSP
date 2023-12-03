@@ -40,7 +40,7 @@ stages:
     
     jobs:
     - job: Build
-      displayName: Build Job
+      displayName: Build & Test Job
 
       steps:
       - checkout: self
@@ -87,8 +87,9 @@ stages:
 
 
   - stage: Release
-    displayName: RELEASE DEPLOYMENT
+    displayName: RELEASE
     dependsOn: Build
+    condition: eq(variables.isTag, true)
     pool:
       name: Default
     
