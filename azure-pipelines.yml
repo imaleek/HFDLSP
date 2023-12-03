@@ -21,9 +21,9 @@ pr:
 
 variables:
   - name: isMain
-    value: $[eq(variables['Build.SourceBranch'], 'refs/head/main')]
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   - name: isHotfix
-    value: $[startsWith(variables['Build.SourceBranch'], 'refs/head/hotfix')]
+    value: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix')]
 
 
 name: $(date:yyMMdd)$(rev:.r)
