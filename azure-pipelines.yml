@@ -96,12 +96,13 @@ jobs:
     condition: eq(variables.isTag, true)
   - task: GenerateReleaseNotes@0
     inputs:
-      FromBuildId: '$(Build.BuildId)'
-      ToBuildId: '1'
+      FromBuildId: '1'
+      ToBuildId: '$(Build.BuildId)'
       ReleaseNotesPath: 'GeneratedNotes'
       ReleaseNotesFile: 'ReleaseNotes.md'
       ShowOnlyChangeSet: true
-      Test: true
+      ShowOnlyWorkItems: true
+      Test: false
 
   - task: GitHubRelease@1
     inputs:
@@ -112,8 +113,7 @@ jobs:
       tagSource: 'userSpecifiedTag'
       tag: '$(Build.SourceBranchName)'
       title: 'Release $(Build.SourceBranchName)'
-      releaseNotesSource: 'inline'
-      releaseNotesInline: 'Stuff'
+      releaseNotesFilePath: 'GeneratedNotes/ReleaseNotes.md'
       assets: '$(Build.SourcesDirectory)'
       changeLogCompareToRelease: 'lastFullRelease'
       changeLogType: 'commitBased'
