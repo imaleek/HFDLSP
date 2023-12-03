@@ -103,6 +103,7 @@ stages:
                   dockerRegistryEndpoint: 'Trenches Docker Repo'
                   dockerComposeFile: '$(Pipeline.Workspace)/$(Build.DefinitionName)/docker-compose.yml'
                   dockerComposeFileArgs: 'test=test'
+                  projectName: '$(Build.DefinitionName)'
                   action: 'Run a Docker Compose command'
                   dockerComposeCommand: 'up -d'
 
