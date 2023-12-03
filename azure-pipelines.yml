@@ -105,7 +105,7 @@ stages:
                   dockerComposeFileArgs: 'test=test'
                   projectName: '$(Build.DefinitionName)'
                   action: 'Run a Docker Compose command'
-                  dockerComposeCommand: 'up -d'
+                  dockerComposeCommand: 'up --detach'
 
   - stage: Release
     displayName: RELEASE
