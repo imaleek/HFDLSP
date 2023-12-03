@@ -8,10 +8,22 @@ trigger:
    include:
      - main
      - hotfix/*
+ tags:
+   include:
+     - v*
+
 pr:
  branches:
   include:
     - main
+
+
+variables:
+  - name: isMain
+    value: $[eq(variables['Build.SourceBranch'], 'refs/head/main')]
+  - name: isHotfix
+    value: $[startsWith(variables['Build.SourceBranch'], 'refs/head/hotfix')]
+
 
 name: $(date:yyMMdd)$(rev:.r)
 
@@ -56,3 +68,17 @@ jobs:
       testResultsFiles: "**/TEST-*.xml"
       testRunTitle: '$(Build.DefinitionName)'
     condition: succeededOrFailed()
+
+
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)'
+      ArtifactName: '$(Build.DefinitionName)'
+      publishLocation: 'Container'
+    displayName: Publish $(Build.DefinitionName) artifact
+    condition: and(succeeded(), or(eq(variables.isMain, true), eq(variables.isHotfix, true)))
+
+
+
+  - task: PublishPipelineMetadata@0
