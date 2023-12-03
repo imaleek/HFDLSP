@@ -8,7 +8,7 @@ services:
     environment:
     - SECRET_KEY=${DJANGO_SECRET_KEY}
     - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
-
+    - DEBUG=${DEBUG}
   nginx:
     build: ./nginx
     container_name: nginx

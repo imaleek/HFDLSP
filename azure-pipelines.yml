@@ -4,19 +4,19 @@
 # https://aka.ms/yaml
 
 trigger:
- branches:
-   include:
-     - main
-     - dev
-     - hotfix/*
- tags:
-   include:
-     - '*'
+  branches:
+    include:
+      - main
+      - dev
+      - hotfix/*
+  tags:
+    include:
+      - '*'
 
 pr:
- branches:
-  include:
-    - main
+  branches:
+    include:
+      - main
 
 
 variables:
@@ -88,17 +88,18 @@ stages:
   - stage: Dev
     displayName: DEV DEPLOYMENT
     dependsOn: Build
+    condition: or(eq(variables.isMain, true), eq(variables.isDev, true), eq(variables.isHotfix, true))
     variables:
       - group: hfdlsp_dev
     jobs:
-      - deployment: 
+      - deployment:
         environment:
-         name: dev
-         resourceType: virtualMachine
+          name: dev
+          resourceType: virtualMachine
         strategy:
-         runOnce:
-           deploy:
-             steps:
+          runOnce:
+            deploy:
+              steps:
               - task: DockerCompose@0
                 inputs:
                   containerregistrytype: 'Container Registry'
