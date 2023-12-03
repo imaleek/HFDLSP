@@ -24,6 +24,8 @@ variables:
     value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   - name: isHotfix
     value: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix')]
+  - name: isTag
+    value: $[startsWith(variables['Build.SourceBranch'], 'refs/tags')]
 
 
 name: $(date:yyMMdd)$(rev:.r)
@@ -70,6 +72,14 @@ jobs:
       testRunTitle: '$(Build.DefinitionName)'
     condition: succeededOrFailed()
     
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)'
+      ArtifactName: '$(Build.DefinitionName)'
+      publishLocation: 'Container'
+    displayName: Publish $(Build.DefinitionName) artifact
+    condition: or(eq(variables.isMain, true), eq(variables.isHotfix, true))
+
   - task: Docker@2
     inputs:
       containerRegistry: 'Trenches Docker Repo'
@@ -77,8 +87,11 @@ jobs:
       command: 'buildAndPush'
       Dockerfile: 'src/Dockerfile'
       buildContext: 'src'
-    displayName: Build and Push Docker Image for $(Build.DefinitionName)
-#    condition: or(eq(variables.isMain, true), eq(variables.isHotfix, true))
+      tags: |
+        $(Build.SourceBranchName)
+        latest
+    displayName: Build and Push Docker Image for $(Build.DefinitionName) tag $(Build.SourceBranchName)
+    condition: eq(variables.isTag, true)
 
   - task: GitHubRelease@1
     inputs:
@@ -91,18 +104,10 @@ jobs:
       title: 'Release $(Build.SourceBranchName)'
       releaseNotesSource: 'inline'
       releaseNotesInline: 'Stuff'
-      assets: '$(Build.SourcesDirectory)/*'
+      assets: '$(Build.SourcesDirectory)'
       changeLogCompareToRelease: 'lastFullRelease'
       changeLogType: 'commitBased'
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(Build.SourcesDirectory)'
-      ArtifactName: '$(Build.DefinitionName)'
-      publishLocation: 'Container'
-    displayName: Publish $(Build.DefinitionName) artifact
-#    condition: or(eq(variables.isMain, true), eq(variables.isHotfix, true))
-
-
+    condition: eq(variables.isTag, true)
+    displayName: GitHub release $(Build.SourceBranchName) for $(Build.DefinitionName)
 
   - task: PublishPipelineMetadata@0
