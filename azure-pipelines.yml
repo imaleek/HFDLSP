@@ -17,6 +17,7 @@ pr:
   branches:
     include:
       - main
+      - dev
 
 
 variables:
