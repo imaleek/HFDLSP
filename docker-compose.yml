@@ -5,8 +5,9 @@ services:
     build: ./src
     command: gunicorn HFDLSP.wsgi:application --bind 0.0.0.0:8080
     container_name: hfdlsp
-    env_file:
-      - ./src/.env
+    environment:
+    - SECRET_KEY=${SECRET_KEY}
+    - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
 
   nginx:
     build: ./nginx
