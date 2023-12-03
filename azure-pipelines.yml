@@ -74,7 +74,7 @@ jobs:
       containerRegistry: 'Trenches Docker Repo'
       repository: 'hfdlsp'
       command: 'buildAndPush'
-      Dockerfile: '**/Dockerfile'
+      Dockerfile: 'src/Dockerfile'
       buildContext: 'src'
     displayName: Build and Push Docker Image for $(Build.DefinitionName)
 #    condition: or(eq(variables.isMain, true), eq(variables.isHotfix, true))
