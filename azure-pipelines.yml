@@ -86,6 +86,8 @@ jobs:
       action: 'create'
       target: '$(Build.SourceVersion)'
       tagSource: 'gitTag'
+      tagPattern: '*'
+      title: 'Test'
       assets: '$(Build.SourcesDirectory)/*'
       changeLogCompareToRelease: 'lastFullRelease'
       changeLogType: 'commitBased'
