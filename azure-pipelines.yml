@@ -103,7 +103,8 @@ jobs:
       ShowOnlyChangeSet: true
       ShowOnlyWorkItems: true
       Test: false
-
+    condition: eq(variables.isTag, true)
+    displayName: Generate release note for $(Build.DefinitionName)
   - task: GitHubRelease@1
     inputs:
       gitHubConnection: 'github.com_imaleek'
