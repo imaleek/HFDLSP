@@ -88,6 +88,8 @@ stages:
   - stage: Dev
     displayName: DEV DEPLOYMENT
     dependsOn: Build
+    variables:
+      - group: $(Build.DefinitionName)_dev
     jobs:
       - deployment: 
         environment:
@@ -102,10 +104,10 @@ stages:
                   containerregistrytype: 'Container Registry'
                   dockerRegistryEndpoint: 'Trenches Docker Repo'
                   dockerComposeFile: '$(Pipeline.Workspace)/$(Build.DefinitionName)/docker-compose.yml'
-                  dockerComposeFileArgs: 'test=test'
                   projectName: '$(Build.DefinitionName)'
                   action: 'Run a Docker Compose command'
                   dockerComposeCommand: 'up --detach'
+                displayName: Deploy $(Build.DefinitionName) to Dev
 
   - stage: Release
     displayName: RELEASE
