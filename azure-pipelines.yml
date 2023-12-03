@@ -97,7 +97,7 @@ jobs:
   - task: GenerateReleaseNotes@0
     inputs:
       FromBuildId: '$(Build.BuildId)'
-      ToBuildId: 
+      ToBuildId: '1'
       ReleaseNotesPath: 'GeneratedNotes'
       ReleaseNotesFile: 'ReleaseNotes.md'
       ShowOnlyChangeSet: true
