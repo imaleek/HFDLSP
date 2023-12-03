@@ -76,7 +76,7 @@ jobs:
       command: 'buildAndPush'
       Dockerfile: '**/Dockerfile'
       buildContext: 'src'
-    condition: or(eq(variables.isMain, true), eq(variables.isHotfix, true)))
+    condition: or(eq(variables.isMain, true), eq(variables.isHotfix, true))
 
   - task: PublishBuildArtifacts@1
     inputs:
@@ -84,7 +84,7 @@ jobs:
       ArtifactName: '$(Build.DefinitionName)'
       publishLocation: 'Container'
     displayName: Publish $(Build.DefinitionName) artifact
-    condition: or(eq(variables.isMain, true), eq(variables.isHotfix, true)))
+    condition: or(eq(variables.isMain, true), eq(variables.isHotfix, true))
 
 
 
