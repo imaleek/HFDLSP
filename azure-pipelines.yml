@@ -89,7 +89,7 @@ stages:
     displayName: DEV DEPLOYMENT
     dependsOn: Build
     variables:
-      - group: $(Build.DefinitionName)_dev
+      - group: hfdlsp_dev
     jobs:
       - deployment: 
         environment:
