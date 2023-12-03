@@ -87,7 +87,7 @@ jobs:
       action: 'create'
       target: '$(Build.SourceVersion)'
       tagSource: 'gitTag'
-      tagPattern: '*'
+      tagPattern: '[0-9].[0-9].[0-9]\S*'
       title: 'Release $(Build.SourceBranchName)'
       releaseNotesSource: 'inline'
       releaseNotesInline: 'Stuff'
